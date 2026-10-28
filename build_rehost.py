@@ -520,9 +520,8 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <div class="head rv"><span class="eyebrow">Packages</span><h2 id="pa-h">Three monthly packages. Add what you need.</h2><p class="lead">Three monthly packages, add-ons and an AI consultation, plus a one-off setup fee to build or move the site and connect your accounts. Prices are per month, excluding VAT.</p></div>
 <div class="plans">{plans_html()}</div>
 <div class="addons">{addons_html(ADDONS_G)}</div>
-<div class="terms">
+<div class="terms terms--2">
 <div class="rv">{I('doc')}<span><b>One-off setup: \u20ac[&nbsp;&nbsp;]</b><span>Covers building or moving the website, connecting your accounts, and setting up your first pages.</span></span></div>
-<div class="rv">{I('euro')}<span><b>Running costs at cost, no mark-up</b><span>Your domain name (roughly \u20ac15\u2013\u20ac30 a year) and any paid tools you choose, such as a WhatsApp Business account.</span></span></div>
 <div class="rv">{I('handshake')}<span><b>No long contract</b><span>Month to month, with one month\u2019s notice either way.</span></span></div>
 </div>
 </div></section>

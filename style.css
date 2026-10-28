@@ -408,3 +408,5 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 @media (max-width:620px){.cta--contact{padding:32px 16px 16px;border-radius:26px}.cta--contact .cta-copy{padding:0 8px}.ccard{padding:20px}}
 .cf input{height:44px;padding-top:0;padding-bottom:0}
 .cf{min-width:0}
+.terms--2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:960px){.terms--2{grid-template-columns:1fr}}
