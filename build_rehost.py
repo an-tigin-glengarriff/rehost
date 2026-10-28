@@ -56,6 +56,7 @@ ICONS.update({
 'calc':'<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/>',
 'flag':'<path d="M5 21V4M5 4h11l-2 4 2 4H5"/>',
 'tag':'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/>',
+'phone':'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
 'link':'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 })
 OUTDIR='/workspace/rehost-repo/'
@@ -341,6 +342,9 @@ CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="12
 
 # Contact address, shown as plain text only (no email links; all contact goes through the Google Form)
 CONTACT='cara@rehost.expert'
+TEL='tel:+353838128308'; TEL_SHOW='+353 83 812 8308'
+def call_block(cls='callbox'):
+    return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}Call Cara on {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
 
 def head(title,desc,ogdesc):
     return f'''<!doctype html>
@@ -393,6 +397,7 @@ def cta(h2,p,pick_href):
     return f'''<section class="section" id="contact" aria-labelledby="ct-h"><div class="wrap">
 <div class="cta cta--contact rv"><div class="cta-copy"><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
 <ul class="cta-points" style="list-style:none;padding:0"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Cara</li><li>{I('check')}No obligation</li></ul>
+{call_block('callbox callbox--ink')}
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
 </div>
 <div class="ccard" id="c-card">
@@ -422,7 +427,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
  'rehost.expert rehosts and fixes broken websites for small businesses, looks after domain and certificate renewals, and takes the screen work off your desk: enquiries, social media, reviews and online admin.',
  'Website rescue, hosting and digital services for small businesses.')+f'''
 <header class="top"><div class="wrap">{BRAND('#top')}
-<nav class="menu" aria-label="Sections"><a href="#broken">Broken site?</a><a href="#services">Services</a><a href="#ai">AI consultation</a><a href="#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="#packages">Packages</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
+<nav class="menu" aria-label="Sections"><a href="#broken">Broken site?</a><a href="#services">Services</a><a href="#ai">AI consultation</a><a href="#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="#packages">Packages</a><a href="contact.html">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
 <main id="main">
 <section class="hero"><div class="wrap">
 <div class="rv">
@@ -645,7 +650,7 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
  'rehost.expert for small businesses: examples for hospitality, builders, trades, salons, shops, garages, clinics, professional services, farms, tour operators, clubs and charities, with what we\u2019d do and how AI can help.',
  'Website rescue, admin and AI help for small businesses, with examples by type of business.')+f'''
 <header class="top"><div class="wrap">{BRAND('index.html')}
-<nav class="menu" aria-label="Sections"><a href="index.html">All services</a><a href="#jump">Examples</a><a href="#hospitality">Hospitality</a><a href="index.html#ai">AI consultation</a><a href="index.html#packages">Packages</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
+<nav class="menu" aria-label="Sections"><a href="index.html">All services</a><a href="#jump">Examples</a><a href="#hospitality">Hospitality</a><a href="index.html#ai">AI consultation</a><a href="index.html#packages">Packages</a><a href="contact.html">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
 <main id="main">
 <section class="hero"><div class="wrap">
 <div class="rv">
@@ -727,11 +732,28 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 {cta('Is your website holding your business back?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services')}
 </main>
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
+CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Cara',
+ 'Contact rehost.expert: call Cara on +353 83 812 8308 or send us a message. Based in West Cork.',
+ 'Call Cara or send us a message. Based in West Cork.')+f'''
+<header class="top"><div class="wrap">{BRAND('index.html')}
+<nav class="menu" aria-label="Sections"><a href="index.html#broken">Broken site?</a><a href="index.html#services">Services</a><a href="index.html#ai">AI consultation</a><a href="index.html#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="index.html#packages">Packages</a><a href="contact.html" aria-current="page">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
+<main id="main">
+<section class="hero hero--contact"><div class="wrap">
+<div class="rv">
+<span class="eyebrow">Contact us</span>
+<h1>Talk to <span class="hl">Cara</span>.</h1>
+<p class="lead">Ring for a chat about your website, or send us a message below and Cara will get back to you.</p>
+{call_block()}
+</div>
+</div></section>
+{cta('Prefer to send a message?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services')}
+</main>
+{foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
 REDIRECT='''<!doctype html>
 <html lang="en-IE"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Hospitality \u00b7 rehost.expert</title>
 <meta http-equiv="refresh" content="0; url=business.html#hospitality"><link rel="icon" href="favicon.svg?v=__VER__" type="image/svg+xml">
 <script>location.replace('business.html#hospitality'+(location.search||''))</script></head>
 <body><p>This page has moved to <a href="business.html#hospitality">Business examples: Hospitality</a>.</p></body></html>
 '''
-for fn,pg in (('index.html',HOME),('business.html',BUS),('hospitality.html',REDIRECT)):
+for fn,pg in (('index.html',HOME),('business.html',BUS),('contact.html',CON),('hospitality.html',REDIRECT)):
     pg=pg.replace('__VER__',VER); open(OUTDIR+fn,'w').write(pg); print('wrote',fn,len(pg))

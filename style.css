@@ -412,3 +412,13 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .cf{min-width:0}
 .terms--2{grid-template-columns:repeat(2,1fr)}
 @media (max-width:960px){.terms--2{grid-template-columns:1fr}}
+.callbox{display:flex;flex-direction:column;align-items:flex-start;gap:14px;margin-top:6px}
+.callbox--ink{margin-top:22px}
+.btn--call{font-size:1.08rem;padding:16px 26px}
+.btn--call svg{width:22px;height:22px}
+.based{display:inline-flex;align-items:center;gap:10px;margin:0;font-weight:600;color:var(--muted)}
+.based svg{width:20px;height:20px;flex:none;color:var(--sea)}
+.callbox--ink .btn--call{background:var(--sea-2);color:var(--ink)}
+.callbox--ink .based{color:#d7e2e9}.callbox--ink .based svg{color:#5eead4}
+.hero--contact .wrap{grid-template-columns:1fr}
+@media (max-width:620px){.btn--call{width:100%;justify-content:center;font-size:1.12rem;padding:18px 20px}.callbox{align-items:stretch}}
