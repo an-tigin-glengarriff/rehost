@@ -359,15 +359,44 @@ GFORM_POST=f'https://docs.google.com/forms/d/e/{GFORM_ID}/formResponse'
 # Google Form entry ids (from FB_PUBLIC_LOAD_DATA_ on the public viewform page)
 GF_ENTRY={'name':'2115183178','biz':'842009210','email':'922822673','phone':'1982738485','site':'1405773933','help':'2019704753'}
 
+def gf_post(fid):
+    # hidden form + hidden iframe that POST straight to the Google Form (no relay, no email links)
+    hid=''.join(f'<input type="hidden" name="entry.{GF_ENTRY[k]}" data-k="{k}">' for k in ('name','biz','email','phone','site','help'))
+    return (f'<form id="{fid}-post" action="{GFORM_POST}" method="POST" target="{fid}-sink" hidden>{hid}'
+            f'<input type="hidden" name="fvv" value="1"><input type="hidden" name="pageHistory" value="0"></form>'
+            f'<iframe name="{fid}-sink" id="{fid}-sink" title="Sending" hidden tabindex="-1" aria-hidden="true"></iframe>')
+
+def cfield(k,label,typ,ac,ph,wide=False):
+    i='c-'+k
+    im={'site':' inputmode="url" autocapitalize="off" spellcheck="false"','email':' autocapitalize="off" spellcheck="false"','phone':' inputmode="tel"'}.get(k,'')
+    return (f'<div class="cf{" cf--wide" if wide else ""}"><label for="{i}">{E(label)} <span class="req" aria-hidden="true">*</span></label>'
+            f'<input type="{typ}" id="{i}" name="{k}" autocomplete="{ac}"{im} placeholder="{E(ph)}" required aria-required="true" aria-describedby="{i}-err">'
+            f'<p class="ferr" id="{i}-err" aria-live="polite" hidden></p></div>')
+
 def cta(h2,p,pick_href):
-    # Get in touch: embedded Google Form (answers go to the rehost.expert Google Sheet; no third-party relay)
+    # Get in touch: native form that posts to the rehost.expert Google Form (answers land in its Sheet)
+    fields=''.join([cfield('name','Your name','text','name','e.g. Mary Murphy'),
+        cfield('biz','Business','text','organization','e.g. Murphy\u2019s Caf\u00e9'),
+        cfield('email','Email address','email','email','you@yourbusiness.ie'),
+        cfield('phone','Phone number','tel','tel','087 123 4567'),
+        cfield('site','Website address','text','url','yourbusiness.ie',True)])
     return f'''<section class="section" id="contact" aria-labelledby="ct-h"><div class="wrap">
-<div class="cta cta--gform rv"><div><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
-<p class="cta-note">Fill in the form below and press <b>Submit</b>. It comes straight to us, and we’ll get back to you.</p>
-<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:20px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
-</div><div class="gform">
-<div class="gform-card"><iframe src="{GFORM_URL}?embedded=true" title="Get in touch form" loading="lazy" width="640" height="1280" frameborder="0" marginheight="0" marginwidth="0" onload="this.dataset.loads=(+this.dataset.loads||0)+1;if(window.gformLoaded)gformLoaded(this)">Loading…</iframe></div>
-<p class="gform-fb">Form not loading? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form in a new tab</a>.</p>
+<div class="cta cta--contact rv"><div class="cta-copy"><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
+<ul class="cta-points"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Cara</li><li>{I('check')}No obligation</li></ul>
+<div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
+</div>
+<div class="ccard" id="c-card">
+<form class="cform" id="c-form" novalidate aria-labelledby="c-title">
+<div class="cform-head"><h3 id="c-title">Send us a message</h3><p class="req-note"><span class="req" aria-hidden="true">*</span> required</p></div>
+<div class="cgrid">{fields}
+<div class="cf cf--wide"><label for="c-help">How can we help? <span class="opt">(optional)</span></label><textarea id="c-help" name="help" rows="4" placeholder="Tell us what\u2019s going wrong, or what you\u2019d like your website to do."></textarea></div>
+</div>
+<p class="form-msg" id="c-msg" role="alert" hidden></p>
+<button type="submit" class="btn btn--accent csend" id="c-send"><span class="csend-t">Send message</span>{I('arrow')}</button>
+<p class="cform-alt">Prefer Google Forms? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form</a></p>
+</form>
+<div class="cthanks" id="c-thanks" role="status" aria-live="polite" tabindex="-1" hidden><span class="cthanks-i">{I('check')}</span><div><h3>Thanks, we\u2019ve got your message.</h3><p>Cara will be in touch soon.</p><button type="button" class="linkbtn" id="c-again">Send another message</button></div></div>
+{gf_post('c')}
 </div></div>
 </div></section>'''
 
@@ -453,8 +482,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <button type="submit" class="btn btn--accent" id="send">{I('arrow')}Send my selection</button>
 </form>
 <p class="sel-thanks" id="sel-thanks" role="status" aria-live="polite" hidden>Thanks, your selection has been sent. We\u2019ll be in touch soon.</p>
-<form id="sel-post" action="{GFORM_POST}" method="POST" target="sel-sink" hidden><input type="hidden" name="entry.{GF_ENTRY['name']}" data-k="name"><input type="hidden" name="entry.{GF_ENTRY['biz']}" data-k="biz"><input type="hidden" name="entry.{GF_ENTRY['email']}" data-k="email"><input type="hidden" name="entry.{GF_ENTRY['phone']}" data-k="phone"><input type="hidden" name="entry.{GF_ENTRY['site']}" data-k="site"><input type="hidden" name="entry.{GF_ENTRY['help']}" data-k="help"><input type="hidden" name="fvv" value="1"><input type="hidden" name="pageHistory" value="0"></form>
-<iframe name="sel-sink" id="sel-sink" title="Selection sending" hidden tabindex="-1" aria-hidden="true"></iframe>
+{gf_post('sel')}
 <button type="button" class="linkbtn" id="reset">Clear all choices</button>
 </aside>
 </div>

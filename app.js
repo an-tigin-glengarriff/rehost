@@ -32,7 +32,7 @@
   function sel(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));p.hidden=!on;if(on)p.querySelectorAll('.rv').forEach(function(r){r.classList.add('in');});});}
   tabs.forEach(function(t,i){t.addEventListener('click',function(){sel(t);});t.addEventListener('keydown',function(e){var k=e.key,j=null;if(k==='ArrowRight')j=(i+1)%tabs.length;if(k==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;if(j!==null){e.preventDefault();sel(tabs[j]);tabs[j].focus();}});});
 
-  // ---- shared contact details for the selection panel (validation + saved copy in localStorage) ----
+  // ---- shared contact details: selection panel + Get in touch (one validation, one saved copy in localStorage) ----
   var g=function(id){return document.getElementById(id);};
   var CKEYS=['name','biz','email','phone','site'],CKEY='rehost-contact-v1',cd={};
   try{var raw=JSON.parse(localStorage.getItem(CKEY)||'{}')||{};CKEYS.forEach(function(k){cd[k]=raw[k]||raw['f-'+k]||'';});if(!cd.site)cd.site=localStorage.getItem('rehost-site-v1')||'';}catch(e){CKEYS.forEach(function(k){cd[k]=cd[k]||'';});}
@@ -60,15 +60,30 @@
         grp.tidy(k);});
       el.addEventListener('blur',function(){if(el.getAttribute('aria-invalid'))grp.show(k,fieldError(k,el.value));});});
     groups.push(grp);return grp;}
-  // Get in touch: shrink the embedded Google Form after submit.
-  // Load 1 = the form, load 2 = Google's confirmation page, load 3 = "Submit another response" (form again), and so on.
-  var gfr=document.querySelector('.gform-card iframe');
-  function gfSize(f){var n=+f.dataset.loads||0,done=n>1&&n%2===0;
-    if(done===f.classList.contains('done'))return;
-    f.classList.toggle('done',done);
-    var card=f.closest('.gform');if(card&&card.scrollIntoView)card.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});}
-  window.gformLoaded=gfSize;
-  if(gfr&&gfr.dataset.loads)gfSize(gfr);
+  // Send values to the Google Form: a normal HTML form POST into a hidden iframe (no relay, no email links).
+  function gfSend(fid,v,btn,label,done){
+    var post=g(fid+'-post'),sink=g(fid+'-sink'),t=btn.querySelector('.csend-t')||btn.lastChild,timer;
+    post.querySelectorAll('[data-k]').forEach(function(inp){inp.value=v[inp.dataset.k]||'';});
+    function finish(ok){sink.removeEventListener('load',onLoad);clearTimeout(timer);btn.disabled=false;btn.classList.remove('sending');t.textContent=label;done(ok);}
+    function onLoad(){finish(true);}
+    sink.addEventListener('load',onLoad);
+    btn.disabled=true;btn.classList.add('sending');t.textContent='Sending\u2026';
+    timer=setTimeout(function(){finish(false);},20000);
+    post.submit();}
+
+  // Get in touch form
+  if(g('c-form')){
+    var cgrp=ContactGroup('c-','c-msg',null),cform=g('c-form'),cthx=g('c-thanks');
+    cform.addEventListener('submit',function(e){e.preventDefault();
+      if(!cgrp.validate())return;
+      var v=cgrp.values();v.help=g('c-help').value.trim();
+      gfSend('c',v,g('c-send'),'Send message',function(ok){
+        var m=g('c-msg');
+        if(!ok){m.textContent='Sorry, that didn\u2019t send. Please try again, or use the Google Form link below.';m.hidden=false;return;}
+        cform.hidden=true;cthx.hidden=false;g('c-help').value='';
+        g('c-card').scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});cthx.focus({preventScroll:true});});});
+    g('c-again').addEventListener('click',function(){cthx.hidden=true;cform.hidden=false;g('c-help').focus();});
+  }
 
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
@@ -113,15 +128,14 @@
     return L.join('\n').trim();
   }
   var pgrp=ContactGroup('f-','form-msg',null);
-  var post=$('sel-post'),sink=$('sel-sink'),thanks=$('sel-thanks'),sending=false;
-  sink.addEventListener('load',function(){if(!sending)return;sending=false;
-    var b=$('send');b.disabled=false;b.lastChild.textContent='Send my selection';
-    thanks.hidden=false;thanks.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});});
+  var thanks=$('sel-thanks');
   $('sel-form').addEventListener('submit',function(e){e.preventDefault();thanks.hidden=true;
     if(!pgrp.validate())return;
     var v=pgrp.values();v.help=selectionText();
-    post.querySelectorAll('[data-k]').forEach(function(inp){inp.value=v[inp.dataset.k]||'';});
-    var b=$('send');b.disabled=true;b.lastChild.textContent='Sending\u2026';sending=true;post.submit();});
+    gfSend('sel',v,$('send'),'Send my selection',function(ok){
+      var m=$('form-msg');
+      if(!ok){m.textContent='Sorry, that didn\u2019t send. Please try again.';m.hidden=false;return;}
+      thanks.hidden=false;thanks.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});});});
   // "Book an AI consultation": mark AI consultation as Yes and jump to the selection panel
   function pickAI(){var r=rows.filter(function(x){return nm(x)==='AI consultation';})[0];if(!r)return;
     state[r.dataset.i]='yes';r.dataset.v='yes';var inp=r.querySelector('input[value=yes]');if(inp)inp.checked=true;save();render();

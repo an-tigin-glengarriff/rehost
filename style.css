@@ -355,19 +355,54 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 [id]{scroll-margin-top:84px}
 @media (max-width:860px){.ex,.ex-cols{grid-template-columns:1fr}.ex.flip .ex-art{order:0}.ex{gap:24px}}
 
-/* Get in touch: embedded Google Form */
-.cta--gform{grid-template-columns:1fr;align-items:start}
-.gform{width:100%;max-width:680px;margin:0 auto}
-.gform-card{background:#fff;border-radius:22px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden}
-.gform-card iframe{display:block;width:100%;max-width:640px;height:1280px;margin:0 auto;border:0;border-radius:14px;background:#fff}
-@media (max-width:600px){.gform-card{padding:4px;border-radius:16px}.gform-card iframe{height:1450px}}
-.gform-fb{margin:12px 0 0;font-size:.88rem;color:#a9b8c3;text-align:center}
-.gform-fb a{color:#5eead4;text-decoration:underline;word-break:break-word}
 .summary textarea{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:.95rem;resize:vertical;min-height:76px}
 .summary textarea::placeholder,.summary input::placeholder{color:#8496a3}
 .summary button.btn{border:0;cursor:pointer;font:inherit;font-weight:700}
 .summary button.btn[disabled]{opacity:.7;cursor:progress}
 .sel-thanks{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:rgba(20,184,166,.16);border:1px solid rgba(94,234,212,.5);color:#ccfbf1;font-size:.92rem;font-weight:600}
-.gform-card iframe.done{height:300px}
-@media (max-width:600px){.gform-card iframe.done{height:370px}}
 .foot-mail{user-select:all}
+/* Get in touch: native form (posts to the Google Form) */
+.cta--contact{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;gap:clamp(28px,4vw,56px)}
+@media (max-width:960px){.cta--contact{grid-template-columns:1fr}}
+.cta-points{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:10px}
+.cta-points li{display:flex;gap:10px;align-items:center;color:#d7e2e9;font-weight:600}
+.cta-points svg{width:22px;height:22px;flex:none;padding:3px;border-radius:999px;background:rgba(20,184,166,.18);color:#5eead4}
+.ccard{background:var(--paper);color:var(--ink);border-radius:24px;padding:clamp(22px,3.2vw,34px);box-shadow:0 24px 60px -24px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.06)}
+.ccard [hidden]{display:none!important}
+.cform-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:18px}
+.cform-head h3{margin:0;font-size:1.35rem;color:var(--ink)}
+.ccard .req-note{margin:0;font-size:.8rem;color:var(--muted)}
+.ccard .req{color:var(--coral-ink);font-weight:800}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.cf--wide{grid-column:1/-1}
+@media (max-width:620px){.cgrid{grid-template-columns:1fr}}
+.cf label{display:block;font-size:.88rem;font-weight:700;color:var(--ink-2);margin:0 0 6px}
+.cf .opt{font-weight:500;color:var(--muted)}
+.cf input,.cf textarea{width:100%;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:1rem;line-height:1.4;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none;appearance:none}
+.cf textarea{resize:vertical;min-height:112px}
+.cf input::placeholder,.cf textarea::placeholder{color:#9aa5ad}
+.cf input:hover,.cf textarea:hover{border-color:#cfc6b7}
+.cf input:focus,.cf textarea:focus{outline:none;border-color:var(--sea-2);box-shadow:0 0 0 4px rgba(20,184,166,.22)}
+.cf input[aria-invalid=true]{border-color:var(--bad);background:#fff7f6}
+.cf input[aria-invalid=true]:focus{box-shadow:0 0 0 4px rgba(185,28,28,.16)}
+.ccard .ferr{margin:6px 0 0;font-size:.84rem;color:var(--bad);font-weight:600}
+.ccard .ferr::before{content:"! ";font-weight:800}
+.ccard .form-msg{margin:16px 0 0;padding:11px 14px;border-radius:12px;background:#fdecea;border:1px solid #f5b7ae;color:#8a1c12;font-size:.9rem;font-weight:600}
+.ccard .csend{width:100%;justify-content:center;margin-top:20px;padding:16px 24px;font-size:1.05rem;border:0;background:var(--sea);color:#fff;box-shadow:0 12px 26px -12px rgba(15,118,110,.7)}
+.ccard .csend:hover{background:#0c625b}
+.ccard .csend:focus-visible{outline:3px solid var(--sea-2);outline-offset:3px}
+.ccard .csend.sending{opacity:.75;cursor:progress;transform:none}
+.ccard .csend.sending svg{animation:cspin 1s linear infinite}
+@keyframes cspin{to{transform:translateX(4px)}}
+.ccard .cform-alt{margin:14px 0 0;text-align:center;font-size:.85rem;color:var(--muted)}
+.ccard .cform-alt a{color:var(--sea);font-weight:600}
+.cthanks{display:flex;gap:16px;align-items:flex-start;outline:none}
+.cthanks-i{flex:none;width:48px;height:48px;border-radius:999px;background:rgba(20,184,166,.15);color:var(--sea);display:grid;place-items:center}
+.cthanks-i svg{width:26px;height:26px}
+.cthanks h3{margin:4px 0 6px;font-size:1.3rem;color:var(--ink)}
+.cthanks p{margin:0 0 10px;color:var(--muted)}
+.cthanks .linkbtn{color:var(--sea);font-weight:700}
+.ccard .req-note{white-space:nowrap}
+@media (max-width:620px){.cform-head h3{font-size:1.2rem}.ccard{border-radius:20px}}
+.cthanks .linkbtn{padding:4px 0;margin-top:2px;font-size:.92rem}
+@media (max-width:620px){.cta--contact{padding:32px 16px 16px;border-radius:26px}.cta--contact .cta-copy{padding:0 8px}.ccard{padding:20px}}
