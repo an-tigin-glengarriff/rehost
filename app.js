@@ -1,5 +1,4 @@
-/* rehost.expert — interactions. PLACEHOLDER: set the real contact address before launch. */
-var CONTACT_EMAIL = 'cara@rehost.expert';
+/* rehost.expert — interactions. All contact goes through the Google Form (no email links). */
 (function(){
   var top=document.querySelector('.top');
   function onScroll(){top.classList.toggle('scrolled',window.scrollY>8);}
@@ -45,7 +44,6 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
     if(k==='phone'&&(v.replace(/\D/g,'').length<7||/[^\d\s()+.\-]/.test(v)))return 'Please enter a valid phone number, like 087 123 4567.';
     if(k==='site'&&(/\s/.test(v)||!/[a-z0-9-]\.[a-z]{2,}/i.test(v)))return 'Please enter a website address, like yourbusiness.ie.';
     return '';}
-  function contactLines(v){return ['Name: '+v.name,'Business: '+v.biz,'Email: '+v.email,'Phone: '+v.phone,'Website: '+v.site];}
   var groups=[];
   function ContactGroup(pre,msgId,onChange){
     var grp={pre:pre,onChange:onChange};
@@ -62,25 +60,19 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
         grp.tidy(k);});
       el.addEventListener('blur',function(){if(el.getAttribute('aria-invalid'))grp.show(k,fieldError(k,el.value));});});
     groups.push(grp);return grp;}
-  // mailto fallback: "Email app didn't open? Copy details" (mailto only, nothing sent from the site)
-  var mfbSrc={};
-  function parseMailto(u){var q=u.split('?')[1]||'',o={subject:'',body:''};q.split('&').forEach(function(p){var i=p.indexOf('=');if(i>0){try{o[p.slice(0,i)]=decodeURIComponent(p.slice(i+1));}catch(e){}}});return o;}
-  function copyText(t,done){
-    function legacy(){var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done(ok);}
-    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(function(){done(true);},legacy);}else legacy();}
-  function initMfb(){document.querySelectorAll('.mfb').forEach(function(box){
-    var src=mfbSrc[box.dataset.mfb],btn=box.querySelector('.mfb-copy'),ok=box.querySelector('.mfb-ok'),lnk=box.querySelector('.mfb-link');
-    if(!src){if(box.dataset.mfb!=='ai'){box.hidden=true;return;}src={check:function(){return true;},url:function(){return 'mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('AI consultation');}};}
-    lnk.href=src.url();lnk.addEventListener('click',function(){lnk.href=src.url();});
-    btn.addEventListener('click',function(){if(!src.check()){ok.textContent='';return;}
-      var u=src.url(),m=parseMailto(u);lnk.href=u;
-      var t='To: '+CONTACT_EMAIL+'\nSubject: '+m.subject+(m.body?'\n\n'+m.body:'');
-      copyText(t,function(y){ok.textContent=y?'Copied. Paste it into a new email to '+CONTACT_EMAIL+'.':'Couldn\u2019t copy automatically. Please email '+CONTACT_EMAIL+'.';});});});}
+  // Get in touch: shrink the embedded Google Form after submit.
+  // Load 1 = the form, load 2 = Google's confirmation page, load 3 = "Submit another response" (form again), and so on.
+  var gfr=document.querySelector('.gform-card iframe');
+  function gfSize(f){var n=+f.dataset.loads||0,done=n>1&&n%2===0;
+    if(done===f.classList.contains('done'))return;
+    f.classList.toggle('done',done);
+    var card=f.closest('.gform');if(card&&card.scrollIntoView)card.scrollIntoView({behavior:reduce?'auto':'smooth',block:'center'});}
+  window.gformLoaded=gfSize;
+  if(gfr&&gfr.dataset.loads)gfSize(gfr);
 
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
-  document.querySelectorAll('[data-contact]').forEach(function(a){a.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent(a.getAttribute('data-subject')||'Website check');});
-  if(!rows.length||!document.getElementById('send')){initMfb();return;}
+  if(!rows.length||!document.getElementById('send'))return;
   var KEY='rehost-picks-v2',state={};
   try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
   rows.forEach(function(r){var i=r.dataset.i;if(state[i]){var inp=r.querySelector('input[value='+state[i]+']');if(inp){inp.checked=true;r.dataset.v=state[i];}}
@@ -110,26 +102,33 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
     $('chosen').innerHTML=h||'<p class="empty">Your Yes and Maybe picks will appear here.</p>';
     var s=suggest(y),sg=$('suggest');
     if(s){sg.hidden=false;sg.innerHTML=(s.pkg?'Closest package: <b>'+s.pkg+'</b>'+(s.add.length?' + '+s.add.length+' extra'+(s.add.length>1?'s':''):''):'<b>'+esc(s.add.join(', '))+'</b> on its own, or with any package')+'. <a href="#packages" style="color:#5eead4">See packages</a>';}else sg.hidden=true;
-    $('send').href=mailto();
   }
-  function mailto(){
-    var v=function(id){return $(id).value.trim();},name=v('f-name'),biz=v('f-biz'),email=v('f-email'),phone=v('f-phone'),site=v('f-site');
-    var L=[];L.push('Hello,','','Here are the services I\u2019m interested in.','');
-    L.push.apply(L,contactLines({name:name,biz:biz,email:email,phone:phone,site:site}));L.push('');
-    var groups={};rows.forEach(function(r){(groups[r.dataset.area]=groups[r.dataset.area]||[]).push(r);});
-    ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'YES':v==='maybe'?'MAYBE':'NO')+' ('+list.length+')');list.forEach(function(r){L.push('- '+nm(r)+' ['+r.dataset.area+']');});L.push('');});
-    var undec=rows.filter(function(r){return !state[r.dataset.i];});
-    if(undec.length){L.push('NOT DECIDED ('+undec.length+')');undec.forEach(function(r){L.push('- '+nm(r));});L.push('');}
+  function selectionText(){
+    var L=['Services selection:',''];
+    ['yes','maybe','no'].forEach(function(v){var list=pick(v);if(!list.length)return;L.push((v==='yes'?'Yes':v==='maybe'?'Maybe':'No')+' ('+list.length+')');list.forEach(function(r){L.push('- '+nm(r)+' ['+r.dataset.area+']');});L.push('');});
+    var undec=rows.filter(function(r){return !state[r.dataset.i];}).length;
+    if(undec)L.push('Not decided: '+undec+' service'+(undec>1?'s':''),'');
     var s=suggest(pick('yes'));if(s)L.push(s.pkg?'Closest package: '+s.pkg+(s.add.length?' + '+s.add.join(', '):''):'Extras only: '+s.add.join(', '),'');
-    L.push('Thanks');
-    var subj='Services selection'+(biz?' \u2013 '+biz:'');
-    return 'mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(L.join('\n'));
+    var notes=$('f-notes').value.trim();if(notes)L.push('Notes:',notes);
+    return L.join('\n').trim();
   }
-  var pgrp=ContactGroup('f-','form-msg',function(){$('send').href=mailto();});
-  $('send').addEventListener('click',function(e){if(!pgrp.validate()){e.preventDefault();return;}this.href=mailto();});
-  $('sel-form').addEventListener('submit',function(e){e.preventDefault();if(pgrp.validate())window.location.href=mailto();});
-  mfbSrc.selection={check:function(){return pgrp.validate();},url:mailto};
-  initMfb();
+  var pgrp=ContactGroup('f-','form-msg',null);
+  var post=$('sel-post'),sink=$('sel-sink'),thanks=$('sel-thanks'),sending=false;
+  sink.addEventListener('load',function(){if(!sending)return;sending=false;
+    var b=$('send');b.disabled=false;b.lastChild.textContent='Send my selection';
+    thanks.hidden=false;thanks.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'});});
+  $('sel-form').addEventListener('submit',function(e){e.preventDefault();thanks.hidden=true;
+    if(!pgrp.validate())return;
+    var v=pgrp.values();v.help=selectionText();
+    post.querySelectorAll('[data-k]').forEach(function(inp){inp.value=v[inp.dataset.k]||'';});
+    var b=$('send');b.disabled=true;b.lastChild.textContent='Sending\u2026';sending=true;post.submit();});
+  // "Book an AI consultation": mark AI consultation as Yes and jump to the selection panel
+  function pickAI(){var r=rows.filter(function(x){return nm(x)==='AI consultation';})[0];if(!r)return;
+    state[r.dataset.i]='yes';r.dataset.v='yes';var inp=r.querySelector('input[value=yes]');if(inp)inp.checked=true;save();render();
+    var p=document.querySelector('aside.summary');if(p)p.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    var first=CKEYS.map(function(k){return $('f-'+k);}).filter(function(x){return !x.value.trim();})[0];if(first)setTimeout(function(){first.focus({preventScroll:true});},400);}
+  document.querySelectorAll('[data-pick-ai]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();pickAI();});});
   $('reset').addEventListener('click',function(){state={};save();rows.forEach(function(r){delete r.dataset.v;r.querySelectorAll('input').forEach(function(i){i.checked=false;});});render();});
   render();
+  if(/[?&]pick=ai\b/.test(location.search))setTimeout(pickAI,300);
 })();

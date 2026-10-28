@@ -329,12 +329,8 @@ def hero_art(kind):
 
 CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="110" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="2"/><circle cx="120" cy="120" r="78" fill="none" stroke="rgba(20,184,166,.35)" stroke-width="2" stroke-dasharray="4 8"/><g transform="translate(60 60) scale(1.875)"><rect width="64" height="64" rx="16" fill="#14b8a6"/><path d="M45 22a16 16 0 1 0 3 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M41 14l6 8-9 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 33l6 6 11-12" fill="none" stroke="#ffb199" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>'''
 
-# PLACEHOLDER contact address: replace before launch (also in app.js CONTACT_EMAIL)
+# Contact address, shown as plain text only (no email links; all contact goes through the Google Form)
 CONTACT='cara@rehost.expert'
-
-def mailfb(which):
-    # mailto-only fallback shown under a send button; app.js fills the copy text
-    return f'<div class="mfb" data-mfb="{which}"><p>Email app didn\u2019t open? Copy your details and email <a class="mfb-link" href="mailto:{CONTACT}">{CONTACT}</a>.</p><button type="button" class="mfb-copy">{I("copy")}Copy details</button><span class="mfb-ok" role="status" aria-live="polite"></span></div>'
 
 def head(title,desc,ogdesc):
     return f'''<!doctype html>
@@ -342,6 +338,7 @@ def head(title,desc,ogdesc):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="format-detection" content="telephone=no, email=no">
 <meta name="robots" content="noindex, nofollow">
 <title>{title}</title>
 <meta name="description" content="{desc}">
@@ -358,6 +355,9 @@ def head(title,desc,ogdesc):
 
 GFORM_ID='1FAIpQLSfOo1K7R60t8rfbQOhOktBgd1-iivUf306MHqamL8B0WoUY5g'
 GFORM_URL=f'https://docs.google.com/forms/d/e/{GFORM_ID}/viewform'
+GFORM_POST=f'https://docs.google.com/forms/d/e/{GFORM_ID}/formResponse'
+# Google Form entry ids (from FB_PUBLIC_LOAD_DATA_ on the public viewform page)
+GF_ENTRY={'name':'2115183178','biz':'842009210','email':'922822673','phone':'1982738485','site':'1405773933','help':'2019704753'}
 
 def cta(h2,p,pick_href):
     # Get in touch: embedded Google Form (answers go to the rehost.expert Google Sheet; no third-party relay)
@@ -366,13 +366,13 @@ def cta(h2,p,pick_href):
 <p class="cta-note">Fill in the form below and press <b>Submit</b>. It comes straight to us, and we’ll get back to you.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:20px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
 </div><div class="gform">
-<div class="gform-card"><iframe src="{GFORM_URL}?embedded=true" title="Get in touch form" loading="lazy" width="640" height="1280" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe></div>
-<p class="gform-fb">Form not loading? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form in a new tab</a> or email <a href="mailto:{CONTACT}">{CONTACT}</a>.</p>
+<div class="gform-card"><iframe src="{GFORM_URL}?embedded=true" title="Get in touch form" loading="lazy" width="640" height="1280" frameborder="0" marginheight="0" marginwidth="0" onload="this.dataset.loads=(+this.dataset.loads||0)+1;if(window.gformLoaded)gformLoaded(this)">Loading…</iframe></div>
+<p class="gform-fb">Form not loading? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form in a new tab</a>.</p>
 </div></div>
 </div></section>'''
 
 def foot(line,home):
-    return f'''<footer class="foot"><div class="wrap">{BRAND(home)}<span>{line}</span><span>\u00a9 2026 rehost.expert</span></div></footer>
+    return f'''<footer class="foot"><div class="wrap">{BRAND(home)}<span>{line}</span><span class="foot-mail">{CONTACT}</span><span>\u00a9 2026 rehost.expert</span></div></footer>
 <script src="app.js"></script>
 </body>
 </html>
@@ -426,8 +426,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <div class="rv"><span class="eyebrow" style="color:var(--sea-2)">AI consultation</span><h2 id="ai-h">How could AI help your business?</h2>
 <p class="lead">Book a consultation to talk through how AI and automation could help with the way your business already runs. We look at your day-to-day processes together, pick out the repetitive jobs, and talk plainly about where AI could help and where it wouldn\u2019t.</p>
 <p style="color:#a9b8c3">You decide what, if anything, to go ahead with. Anything we set up drafts for your approval first, unless you ask otherwise.</p>
-<div class="ctas"><a class="btn btn--accent" data-contact data-subject="AI consultation" href="mailto:{CONTACT}?subject=AI%20consultation" style="background:var(--sea-2);color:var(--ink)">{I('spark')}Book an AI consultation</a><span class="ai-price">AI consultation \u2014 Price on request</span></div>
-{mailfb('ai')}
+<div class="ctas"><a class="btn btn--accent" data-pick-ai href="#services" style="background:var(--sea-2);color:var(--ink)">{I('spark')}Book an AI consultation</a><span class="ai-price">AI consultation \u2014 Price on request</span></div>
 </div>
 <div class="ai-art rv">{ai_art()}</div>
 </div>
@@ -449,10 +448,13 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <form id="sel-form" novalidate>
 <p class="req-note"><span class="req" aria-hidden="true">*</span> required</p>
 {contact_fields()}
+<div class="fld"><label class="f" for="f-notes">Anything else? <span class="opt">(optional)</span></label><textarea id="f-notes" name="notes" rows="3" placeholder="Questions, deadlines, anything we should know"></textarea></div>
 <p class="form-msg" id="form-msg" role="alert" hidden></p>
+<button type="submit" class="btn btn--accent" id="send">{I('arrow')}Send my selection</button>
 </form>
-<a class="btn btn--accent" id="send" href="mailto:{CONTACT}">{I('mail')}Email my selection</a>
-{mailfb('selection')}
+<p class="sel-thanks" id="sel-thanks" role="status" aria-live="polite" hidden>Thanks, your selection has been sent. We\u2019ll be in touch soon.</p>
+<form id="sel-post" action="{GFORM_POST}" method="POST" target="sel-sink" hidden><input type="hidden" name="entry.{GF_ENTRY['name']}" data-k="name"><input type="hidden" name="entry.{GF_ENTRY['biz']}" data-k="biz"><input type="hidden" name="entry.{GF_ENTRY['email']}" data-k="email"><input type="hidden" name="entry.{GF_ENTRY['phone']}" data-k="phone"><input type="hidden" name="entry.{GF_ENTRY['site']}" data-k="site"><input type="hidden" name="entry.{GF_ENTRY['help']}" data-k="help"><input type="hidden" name="fvv" value="1"><input type="hidden" name="pageHistory" value="0"></form>
+<iframe name="sel-sink" id="sel-sink" title="Selection sending" hidden tabindex="-1" aria-hidden="true"></iframe>
 <button type="button" class="linkbtn" id="reset">Clear all choices</button>
 </aside>
 </div>
@@ -513,7 +515,7 @@ def hero_art_u(kind,suf):
     a=hero_art(kind)
     for i in ('arc','hc','sea','sky'): a=a.replace(f'id="{i}"',f'id="{i}{suf}"').replace(f'url(#{i})',f'url(#{i}{suf})').replace(f'href="#{i}"',f'href="#{i}{suf}"')
     return a
-def ai_btn(name): return f'<a class="btn btn--accent" data-contact data-subject="AI consultation \u2013 {E(name)}" href="mailto:{CONTACT}?subject=AI%20consultation">{I("spark")}Book an AI consultation</a>'
+def ai_btn(name): return f'<a class="btn btn--accent" data-pick-ai href="index.html?pick=ai#services">{I("spark")}Book an AI consultation</a>'
 EXAMPLES=[
 ('builders','hammer','Builders and construction','Builders, extensions, renovations and groundworks',
  'Quote requests, site photos and project updates, without the late nights at the laptop.',

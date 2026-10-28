@@ -355,16 +355,6 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 [id]{scroll-margin-top:84px}
 @media (max-width:860px){.ex,.ex-cols{grid-template-columns:1fr}.ex.flip .ex-art{order:0}.ex{gap:24px}}
 
-/* mailto fallback under send buttons */
-.mfb{margin-top:12px;font-size:.85rem;color:#a9b8c3;line-height:1.45}
-.mfb p{margin:0 0 8px}
-.mfb a.mfb-link{color:#5eead4;text-decoration:underline;word-break:break-all}
-.mfb .mfb-copy{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#e9eef2;border-radius:999px;padding:6px 14px;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
-.mfb .mfb-copy:hover{background:rgba(255,255,255,.16)}
-.mfb .mfb-copy:focus-visible{outline:2px solid #5eead4;outline-offset:2px}
-.mfb .mfb-copy svg{width:15px;height:15px}
-.mfb .mfb-ok{display:block;margin-top:6px;color:#5eead4;font-weight:600}
-.mfb .mfb-ok:empty{display:none}
 /* Get in touch: embedded Google Form */
 .cta--gform{grid-template-columns:1fr;align-items:start}
 .gform{width:100%;max-width:680px;margin:0 auto}
@@ -373,3 +363,11 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 @media (max-width:600px){.gform-card{padding:4px;border-radius:16px}.gform-card iframe{height:1450px}}
 .gform-fb{margin:12px 0 0;font-size:.88rem;color:#a9b8c3;text-align:center}
 .gform-fb a{color:#5eead4;text-decoration:underline;word-break:break-word}
+.summary textarea{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:.95rem;resize:vertical;min-height:76px}
+.summary textarea::placeholder,.summary input::placeholder{color:#8496a3}
+.summary button.btn{border:0;cursor:pointer;font:inherit;font-weight:700}
+.summary button.btn[disabled]{opacity:.7;cursor:progress}
+.sel-thanks{margin:14px 0 0;padding:12px 14px;border-radius:12px;background:rgba(20,184,166,.16);border:1px solid rgba(94,234,212,.5);color:#ccfbf1;font-size:.92rem;font-weight:600}
+.gform-card iframe.done{height:300px}
+@media (max-width:600px){.gform-card iframe.done{height:370px}}
+.foot-mail{user-select:all}
