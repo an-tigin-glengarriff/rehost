@@ -33,7 +33,7 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
   function sel(t){tabs.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on);x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));p.hidden=!on;if(on)p.querySelectorAll('.rv').forEach(function(r){r.classList.add('in');});});}
   tabs.forEach(function(t,i){t.addEventListener('click',function(){sel(t);});t.addEventListener('keydown',function(e){var k=e.key,j=null;if(k==='ArrowRight')j=(i+1)%tabs.length;if(k==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;if(j!==null){e.preventDefault();sel(tabs[j]);tabs[j].focus();}});});
 
-  // ---- shared contact details: selection panel + Get in touch (one validation, one saved copy) ----
+  // ---- shared contact details for the selection panel (validation + saved copy in localStorage) ----
   var g=function(id){return document.getElementById(id);};
   var CKEYS=['name','biz','email','phone','site'],CKEY='rehost-contact-v1',cd={};
   try{var raw=JSON.parse(localStorage.getItem(CKEY)||'{}')||{};CKEYS.forEach(function(k){cd[k]=raw[k]||raw['f-'+k]||'';});if(!cd.site)cd.site=localStorage.getItem('rehost-site-v1')||'';}catch(e){CKEYS.forEach(function(k){cd[k]=cd[k]||'';});}
@@ -76,17 +76,6 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
       var u=src.url(),m=parseMailto(u);lnk.href=u;
       var t='To: '+CONTACT_EMAIL+'\nSubject: '+m.subject+(m.body?'\n\n'+m.body:'');
       copyText(t,function(y){ok.textContent=y?'Copied. Paste it into a new email to '+CONTACT_EMAIL+'.':'Couldn\u2019t copy automatically. Please email '+CONTACT_EMAIL+'.';});});});}
-
-  // Get in touch form
-  if(g('c-form')){
-    var cgrp,contactMailto=function(){var v=cgrp.values();var L=['Hello,',''].concat(contactLines(v),['','I\u2019d like a website check and a chat about what my business needs.','','Thanks']);
-      return 'mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Website check'+(v.biz?' \u2013 '+v.biz:''))+'&body='+encodeURIComponent(L.join('\n'));};
-    cgrp=ContactGroup('c-','c-msg',function(){g('c-send').href=contactMailto();});
-    g('c-send').href=contactMailto();
-    g('c-send').addEventListener('click',function(e){if(!cgrp.validate()){e.preventDefault();return;}this.href=contactMailto();});
-    g('c-form').addEventListener('submit',function(e){e.preventDefault();if(cgrp.validate())window.location.href=contactMailto();});
-    mfbSrc.contact={check:function(){return cgrp.validate();},url:contactMailto};
-  }
 
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));

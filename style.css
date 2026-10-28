@@ -318,13 +318,7 @@ td.num{font-weight:700;color:var(--deep);white-space:nowrap}
 .summary .form-msg{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:rgba(242,107,79,.16);border:1px solid rgba(255,138,115,.5);color:#ffd2c7;font-size:.88rem;font-weight:600}
 .summary form{margin:0}
 /* v5: Get in touch form */
-.cta-form{background:rgba(14,27,38,.55);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:22px 24px;position:relative;align-self:start}
-.cta-form .btn{width:100%;justify-content:center;margin-top:16px}
-.cta-form input{width:100%;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;font:inherit;font-size:.95rem}
-.cta-form input::placeholder{color:#8496a3}
-.cta-form .req-note{margin-top:0}
 .cta .cta-note{font-size:.95rem;color:#a9b8c3}
-.cta-form.summary{position:relative;top:auto;box-shadow:none;background:rgba(14,27,38,.55)}
 /* v6: business examples page */
 .sector.lnk{transition:transform .25s,box-shadow .25s,border-color .25s}
 .sector.lnk:hover,.sector.lnk:focus-visible{transform:translateY(-3px);box-shadow:var(--shadow);border-color:var(--sea)}
@@ -371,3 +365,11 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .mfb .mfb-copy svg{width:15px;height:15px}
 .mfb .mfb-ok{display:block;margin-top:6px;color:#5eead4;font-weight:600}
 .mfb .mfb-ok:empty{display:none}
+/* Get in touch: embedded Google Form */
+.cta--gform{grid-template-columns:1fr;align-items:start}
+.gform{width:100%;max-width:680px;margin:0 auto}
+.gform-card{background:#fff;border-radius:22px;padding:8px;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden}
+.gform-card iframe{display:block;width:100%;max-width:640px;height:1280px;margin:0 auto;border:0;border-radius:14px;background:#fff}
+@media (max-width:600px){.gform-card{padding:4px;border-radius:16px}.gform-card iframe{height:1450px}}
+.gform-fb{margin:12px 0 0;font-size:.88rem;color:#a9b8c3;text-align:center}
+.gform-fb a{color:#5eead4;text-decoration:underline;word-break:break-word}

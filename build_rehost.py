@@ -356,18 +356,19 @@ def head(title,desc,ogdesc):
 <body id="top">
 <a class="skip" href="#main">Skip to content</a>'''
 
+GFORM_ID='1FAIpQLSfOo1K7R60t8rfbQOhOktBgd1-iivUf306MHqamL8B0WoUY5g'
+GFORM_URL=f'https://docs.google.com/forms/d/e/{GFORM_ID}/viewform'
+
 def cta(h2,p,pick_href):
+    # Get in touch: embedded Google Form (answers go to the rehost.expert Google Sheet; no third-party relay)
     return f'''<section class="section" id="contact" aria-labelledby="ct-h"><div class="wrap">
-<div class="cta rv"><div><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
-<p class="cta-note">Fill in your details and press <b>Ask for a site check</b>. It opens an email to us with your details filled in, ready to send.</p>
+<div class="cta cta--gform rv"><div><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
+<p class="cta-note">Fill in the form below and press <b>Submit</b>. It comes straight to us, and we’ll get back to you.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:20px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
-</div><form class="cta-form summary" id="c-form" novalidate aria-labelledby="ct-h">
-<p class="req-note"><span class="req" aria-hidden="true">*</span> required</p>
-{contact_fields('c-')}
-<p class="form-msg" id="c-msg" role="alert" hidden></p>
-<a class="btn btn--accent" id="c-send" href="mailto:{CONTACT}?subject=Website%20check">{I('mail')}Ask for a site check</a>
-{mailfb('contact')}
-</form></div>
+</div><div class="gform">
+<div class="gform-card"><iframe src="{GFORM_URL}?embedded=true" title="Get in touch form" loading="lazy" width="640" height="1280" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe></div>
+<p class="gform-fb">Form not loading? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form in a new tab</a> or email <a href="mailto:{CONTACT}">{CONTACT}</a>.</p>
+</div></div>
 </div></section>'''
 
 def foot(line,home):
