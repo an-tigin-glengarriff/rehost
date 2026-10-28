@@ -1,5 +1,5 @@
 # Generates rehost/index.html (generic), rehost/business.html (examples incl. hospitality) and rehost/hospitality.html (redirect). Self-contained; relative paths only
-import html
+import html, hashlib
 E=html.escape
 ICONS={
 'globe':'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.8 3 2.8 15 0 18M12 3c-2.8 3-2.8 15 0 18"/>',
@@ -36,7 +36,7 @@ ICONS={
 'chart':'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
 }
 def I(n,cls=''):
-    return f'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"{(" class=%s"%chr(34)+cls+chr(34)) if cls else ""}>{ICONS[n]}</svg>'
+    return f'<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"{(" class=%s"%chr(34)+cls+chr(34)) if cls else ""}>{ICONS[n]}</svg>'
 
 
 ICONS.update({
@@ -58,6 +58,14 @@ ICONS.update({
 'link':'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 })
 OUTDIR='/workspace/rehost-repo/'
+# Cache-busting: ?v= is a hash of the asset files, so every change to style.css/app.js/favicon.svg gets a new URL
+# (GitHub Pages sends max-age=600, so without this a browser can pair new HTML with an old stylesheet).
+def _ver():
+    h=hashlib.sha1()
+    for f in ('style.css','app.js','favicon.svg'):
+        h.update(open(OUTDIR+f,'rb').read())
+    return h.hexdigest()[:10]
+VER=_ver()
 LOGO='''<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14b8a6"/><stop offset="1" stop-color="#0f5f73"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lg)"/><path d="M45 22a16 16 0 1 0 3 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M41 14l6 8-9 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 33l6 6 11-12" fill="none" stroke="#ffb199" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'''
 def BRAND(href): return f'<a class="brand" href="{href}" aria-label="rehost.expert home">{LOGO}<b>rehost<span>.expert</span></b></a>'
 
@@ -346,8 +354,8 @@ def head(title,desc,ogdesc):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{ogdesc}">
 <meta property="og:type" content="website">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="style.css">
+<link rel="icon" href="favicon.svg?v={VER}" type="image/svg+xml">
+<link rel="stylesheet" href="style.css?v={VER}">
 <script>document.documentElement.classList.remove('no-js')</script>
 </head>
 <body id="top">
@@ -382,7 +390,7 @@ def cta(h2,p,pick_href):
         cfield('site','Website address','text','url','yourbusiness.ie',True)])
     return f'''<section class="section" id="contact" aria-labelledby="ct-h"><div class="wrap">
 <div class="cta cta--contact rv"><div class="cta-copy"><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
-<ul class="cta-points"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Cara</li><li>{I('check')}No obligation</li></ul>
+<ul class="cta-points" style="list-style:none;padding:0"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Cara</li><li>{I('check')}No obligation</li></ul>
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
 </div>
 <div class="ccard" id="c-card">
@@ -402,7 +410,7 @@ def cta(h2,p,pick_href):
 
 def foot(line,home):
     return f'''<footer class="foot"><div class="wrap">{BRAND(home)}<span>{line}</span><span class="foot-mail">{CONTACT}</span><span>\u00a9 2026 rehost.expert</span></div></footer>
-<script src="app.js"></script>
+<script src="app.js?v={VER}"></script>
 </body>
 </html>
 '''
@@ -720,9 +728,9 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
 REDIRECT='''<!doctype html>
 <html lang="en-IE"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow"><title>Hospitality \u00b7 rehost.expert</title>
-<meta http-equiv="refresh" content="0; url=business.html#hospitality"><link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta http-equiv="refresh" content="0; url=business.html#hospitality"><link rel="icon" href="favicon.svg?v=__VER__" type="image/svg+xml">
 <script>location.replace('business.html#hospitality'+(location.search||''))</script></head>
 <body><p>This page has moved to <a href="business.html#hospitality">Business examples: Hospitality</a>.</p></body></html>
 '''
 for fn,pg in (('index.html',HOME),('business.html',BUS),('hospitality.html',REDIRECT)):
-    open(OUTDIR+fn,'w').write(pg); print('wrote',fn,len(pg))
+    pg=pg.replace('__VER__',VER); open(OUTDIR+fn,'w').write(pg); print('wrote',fn,len(pg))
