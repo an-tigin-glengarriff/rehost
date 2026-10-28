@@ -341,10 +341,10 @@ def hero_art(kind):
 CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="110" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="2"/><circle cx="120" cy="120" r="78" fill="none" stroke="rgba(20,184,166,.35)" stroke-width="2" stroke-dasharray="4 8"/><g transform="translate(60 60) scale(1.875)"><rect width="64" height="64" rx="16" fill="#14b8a6"/><path d="M45 22a16 16 0 1 0 3 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M41 14l6 8-9 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 33l6 6 11-12" fill="none" stroke="#ffb199" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>'''
 
 # Contact address, shown as plain text only (no email links; all contact goes through the Google Form)
-CONTACT='cara@rehost.expert'
+CONTACT='shane@rehost.expert'
 TEL='tel:+353838128308'; TEL_SHOW='+353 83 812 8308'
 def call_block(cls='callbox'):
-    return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}Call Cara on {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
+    return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}Call Shane on {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
 
 def head(title,desc,ogdesc):
     return f'''<!doctype html>
@@ -396,7 +396,7 @@ def cta(h2,p,pick_href):
         cfield('site','Website address','text','url','yourbusiness.ie',True)])
     return f'''<section class="section" id="contact" aria-labelledby="ct-h"><div class="wrap">
 <div class="cta cta--contact rv"><div class="cta-copy"><span class="eyebrow" style="color:var(--sea-2)">Get in touch</span><h2 id="ct-h">{h2}</h2><p>{p}</p>
-<ul class="cta-points" style="list-style:none;padding:0"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Cara</li><li>{I('check')}No obligation</li></ul>
+<ul class="cta-points" style="list-style:none;padding:0"><li>{I('check')}We look at your current site first</li><li>{I('check')}A personal reply from Shane</li><li>{I('check')}No obligation</li></ul>
 {call_block('callbox callbox--ink')}
 <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:22px"><a class="btn btn--ghost" href="{pick_href}" style="color:#fff">Pick your services</a></div>
 </div>
@@ -410,7 +410,7 @@ def cta(h2,p,pick_href):
 <button type="submit" class="btn btn--accent csend" id="c-send"><span class="csend-t">Send message</span>{I('arrow')}</button>
 <p class="cform-alt">Prefer Google Forms? <a href="{GFORM_URL}" target="_blank" rel="noopener">Open the form</a></p>
 </form>
-<div class="cthanks" id="c-thanks" role="status" aria-live="polite" tabindex="-1" hidden><span class="cthanks-i">{I('check')}</span><div><h3>Thanks, we\u2019ve got your message.</h3><p>Cara will be in touch soon.</p><button type="button" class="linkbtn" id="c-again">Send another message</button></div></div>
+<div class="cthanks" id="c-thanks" role="status" aria-live="polite" tabindex="-1" hidden><span class="cthanks-i">{I('check')}</span><div><h3>Thanks, we\u2019ve got your message.</h3><p>Shane will be in touch soon.</p><button type="button" class="linkbtn" id="c-again">Send another message</button></div></div>
 {gf_post('c')}
 </div></div>
 </div></section>'''
@@ -732,17 +732,17 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 {cta('Is your website holding your business back?','Tell us your website address and we\u2019ll check it. Then we\u2019ll talk through what you need, with no obligation.','index.html#services')}
 </main>
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
-CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Cara',
- 'Contact rehost.expert: call Cara on +353 83 812 8308 or send us a message. Based in West Cork.',
- 'Call Cara or send us a message. Based in West Cork.')+f'''
+CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Shane',
+ 'Contact rehost.expert: call Shane on +353 83 812 8308 or send us a message. Based in West Cork.',
+ 'Call Shane or send us a message. Based in West Cork.')+f'''
 <header class="top"><div class="wrap">{BRAND('index.html')}
 <nav class="menu" aria-label="Sections"><a href="index.html#broken">Broken site?</a><a href="index.html#services">Services</a><a href="index.html#ai">AI consultation</a><a href="index.html#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="index.html#packages">Packages</a><a href="contact.html" aria-current="page">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
 <main id="main">
 <section class="hero hero--contact"><div class="wrap">
 <div class="rv">
 <span class="eyebrow">Contact us</span>
-<h1>Talk to <span class="hl">Cara</span>.</h1>
-<p class="lead">Ring for a chat about your website, or send us a message below and Cara will get back to you.</p>
+<h1>Talk to <span class="hl">Shane</span>.</h1>
+<p class="lead">Ring for a chat about your website, or send us a message below and Shane will get back to you.</p>
 {call_block()}
 </div>
 </div></section>
