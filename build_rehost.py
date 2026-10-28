@@ -40,6 +40,7 @@ def I(n,cls=''):
 
 
 ICONS.update({
+'layout':'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/>',
 'shop':'<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v9h14v-9M10 21v-5h4v5"/>',
 'wrench':'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8V21h3.2l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
 'plus':'<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/>',
@@ -74,6 +75,7 @@ SV=[
 ('Website','globe','Hosting and updates','Fast, low-cost hosting on your own domain with a secure (https) certificate. Text, photo, product, menu and price changes whenever you ask.','Changes within 2 working days',False),
 ('Website','shield','Domain and certificate care','Your domain kept in your name and set to auto-renew, certificates renewed automatically, and both checked from outside every day so the padlock never lapses.','Checked daily',False),
 ('Website','wrench','Fixes and rebuilds','Broken pages, WordPress errors, out-of-date plugins and slow, non-mobile sites repaired, or rebuilt on simple hosting with nothing to patch.','On request',False),
+('Website','layout','Website redesign','A fresh, modern look and clearer layout for your current site: mobile-friendly and fast, keeping your content, photos and domain. Whether your site stays where it is or moves to us.','One-off \u00b7 Price on request',False),
 ('Website','map','Area pages with maps','Pages on your area, what\u2019s nearby and how to find you, with a map. Customers find you in more local Google searches.','New page each season',False),
 ('Website','cal','News and events page','A news, offers or events page customers can follow, with bank holidays and seasonal hours marked.','Updates automatically',False),
 ('Bookings','sync','Live bookings or availability calendar','Your website calendar stays in sync with your booking or appointment system, so customers never pick a time or date that\u2019s already taken.','Every hour',False),
@@ -93,7 +95,7 @@ SV=[
 ('Add-on','basket','Supplier ordering automation','Regular supplier orders worked out from your bookings or sales, updated as things change, and approved by you on WhatsApp before they go.','Weekly',True),
 ]
 GROUPS=[('Website','globe'),('Bookings','cal'),('Customers','inbox'),('Social','chat'),('Reviews','star'),('Admin','chart'),('AI','spark'),('Add-on','basket')]
-NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen'}
+NUMW={15:'Fifteen',16:'Sixteen',17:'Seventeen',18:'Eighteen',19:'Nineteen',20:'Twenty',21:'Twenty-one'}
 N_CORE=sum(1 for s in SV if not s[5]); N_ADD=len(SV)-N_CORE
 def svc_html():
     out=[]

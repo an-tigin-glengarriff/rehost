@@ -88,7 +88,7 @@
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
   if(!rows.length||!document.getElementById('send'))return;
-  var KEY='rehost-picks-v2',state={};
+  var KEY='rehost-picks-v3',state={};
   try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
   rows.forEach(function(r){var i=r.dataset.i;if(state[i]){var inp=r.querySelector('input[value='+state[i]+']');if(inp){inp.checked=true;r.dataset.v=state[i];}}
     r.addEventListener('change',function(e){state[i]=e.target.value;r.dataset.v=e.target.value;save();render();});});
