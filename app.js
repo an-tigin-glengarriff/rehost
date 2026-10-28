@@ -1,5 +1,5 @@
 /* rehost.expert — interactions. PLACEHOLDER: set the real contact address before launch. */
-var CONTACT_EMAIL = 'hello@example.com';
+var CONTACT_EMAIL = 'cara@rehost.expert';
 (function(){
   var top=document.querySelector('.top');
   function onScroll(){top.classList.toggle('scrolled',window.scrollY>8);}

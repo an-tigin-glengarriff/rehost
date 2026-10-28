@@ -329,7 +329,7 @@ def hero_art(kind):
 CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="120" r="110" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="2"/><circle cx="120" cy="120" r="78" fill="none" stroke="rgba(20,184,166,.35)" stroke-width="2" stroke-dasharray="4 8"/><g transform="translate(60 60) scale(1.875)"><rect width="64" height="64" rx="16" fill="#14b8a6"/><path d="M45 22a16 16 0 1 0 3 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M41 14l6 8-9 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 33l6 6 11-12" fill="none" stroke="#ffb199" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>'''
 
 # PLACEHOLDER contact address: replace before launch (also in app.js CONTACT_EMAIL)
-CONTACT='hello@example.com'
+CONTACT='cara@rehost.expert'
 
 def head(title,desc,ogdesc):
     return f'''<!doctype html>
