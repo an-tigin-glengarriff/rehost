@@ -360,3 +360,14 @@ h2.h1{font-size:clamp(2.1rem,4.4vw,3.4rem);line-height:1.08}
 .back svg{width:18px;height:18px}
 [id]{scroll-margin-top:84px}
 @media (max-width:860px){.ex,.ex-cols{grid-template-columns:1fr}.ex.flip .ex-art{order:0}.ex{gap:24px}}
+
+/* mailto fallback under send buttons */
+.mfb{margin-top:12px;font-size:.85rem;color:#a9b8c3;line-height:1.45}
+.mfb p{margin:0 0 8px}
+.mfb a.mfb-link{color:#5eead4;text-decoration:underline;word-break:break-all}
+.mfb .mfb-copy{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.25);color:#e9eef2;border-radius:999px;padding:6px 14px;font:inherit;font-size:.85rem;font-weight:600;cursor:pointer}
+.mfb .mfb-copy:hover{background:rgba(255,255,255,.16)}
+.mfb .mfb-copy:focus-visible{outline:2px solid #5eead4;outline-offset:2px}
+.mfb .mfb-copy svg{width:15px;height:15px}
+.mfb .mfb-ok{display:block;margin-top:6px;color:#5eead4;font-weight:600}
+.mfb .mfb-ok:empty{display:none}

@@ -62,6 +62,21 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
         grp.tidy(k);});
       el.addEventListener('blur',function(){if(el.getAttribute('aria-invalid'))grp.show(k,fieldError(k,el.value));});});
     groups.push(grp);return grp;}
+  // mailto fallback: "Email app didn't open? Copy details" (mailto only, nothing sent from the site)
+  var mfbSrc={};
+  function parseMailto(u){var q=u.split('?')[1]||'',o={subject:'',body:''};q.split('&').forEach(function(p){var i=p.indexOf('=');if(i>0){try{o[p.slice(0,i)]=decodeURIComponent(p.slice(i+1));}catch(e){}}});return o;}
+  function copyText(t,done){
+    function legacy(){var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy');}catch(e){}document.body.removeChild(ta);done(ok);}
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(function(){done(true);},legacy);}else legacy();}
+  function initMfb(){document.querySelectorAll('.mfb').forEach(function(box){
+    var src=mfbSrc[box.dataset.mfb],btn=box.querySelector('.mfb-copy'),ok=box.querySelector('.mfb-ok'),lnk=box.querySelector('.mfb-link');
+    if(!src){if(box.dataset.mfb!=='ai'){box.hidden=true;return;}src={check:function(){return true;},url:function(){return 'mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('AI consultation');}};}
+    lnk.href=src.url();lnk.addEventListener('click',function(){lnk.href=src.url();});
+    btn.addEventListener('click',function(){if(!src.check()){ok.textContent='';return;}
+      var u=src.url(),m=parseMailto(u);lnk.href=u;
+      var t='To: '+CONTACT_EMAIL+'\nSubject: '+m.subject+(m.body?'\n\n'+m.body:'');
+      copyText(t,function(y){ok.textContent=y?'Copied. Paste it into a new email to '+CONTACT_EMAIL+'.':'Couldn\u2019t copy automatically. Please email '+CONTACT_EMAIL+'.';});});});}
+
   // Get in touch form
   if(g('c-form')){
     var cgrp,contactMailto=function(){var v=cgrp.values();var L=['Hello,',''].concat(contactLines(v),['','I\u2019d like a website check and a chat about what my business needs.','','Thanks']);
@@ -70,12 +85,13 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
     g('c-send').href=contactMailto();
     g('c-send').addEventListener('click',function(e){if(!cgrp.validate()){e.preventDefault();return;}this.href=contactMailto();});
     g('c-form').addEventListener('submit',function(e){e.preventDefault();if(cgrp.validate())window.location.href=contactMailto();});
+    mfbSrc.contact={check:function(){return cgrp.validate();},url:contactMailto};
   }
 
   // services picker
   var rows=[].slice.call(document.querySelectorAll('.svc'));
   document.querySelectorAll('[data-contact]').forEach(function(a){a.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent(a.getAttribute('data-subject')||'Website check');});
-  if(!rows.length||!document.getElementById('send'))return;
+  if(!rows.length||!document.getElementById('send')){initMfb();return;}
   var KEY='rehost-picks-v2',state={};
   try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
   rows.forEach(function(r){var i=r.dataset.i;if(state[i]){var inp=r.querySelector('input[value='+state[i]+']');if(inp){inp.checked=true;r.dataset.v=state[i];}}
@@ -123,6 +139,8 @@ var CONTACT_EMAIL = 'cara@rehost.expert';
   var pgrp=ContactGroup('f-','form-msg',function(){$('send').href=mailto();});
   $('send').addEventListener('click',function(e){if(!pgrp.validate()){e.preventDefault();return;}this.href=mailto();});
   $('sel-form').addEventListener('submit',function(e){e.preventDefault();if(pgrp.validate())window.location.href=mailto();});
+  mfbSrc.selection={check:function(){return pgrp.validate();},url:mailto};
+  initMfb();
   $('reset').addEventListener('click',function(){state={};save();rows.forEach(function(r){delete r.dataset.v;r.querySelectorAll('input').forEach(function(i){i.checked=false;});});render();});
   render();
 })();

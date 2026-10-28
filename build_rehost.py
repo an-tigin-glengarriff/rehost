@@ -30,6 +30,7 @@ ICONS={
 'doc':'<path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/>',
 'arrow':'<path d="M5 12h14M13 6l6 6-6 6"/>',
 'search':'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+'copy':'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
 'mail':'<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
 'server':'<rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01"/>',
 'chart':'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
@@ -56,7 +57,7 @@ ICONS.update({
 'tag':'<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.3"/>',
 'link':'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
 })
-OUTDIR='/workspace/site/rehost/'
+OUTDIR='/workspace/rehost-repo/'
 LOGO='''<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14b8a6"/><stop offset="1" stop-color="#0f5f73"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="url(#lg)"/><path d="M45 22a16 16 0 1 0 3 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M41 14l6 8-9 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 33l6 6 11-12" fill="none" stroke="#ffb199" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>'''
 def BRAND(href): return f'<a class="brand" href="{href}" aria-label="rehost.expert home">{LOGO}<b>rehost<span>.expert</span></b></a>'
 
@@ -331,6 +332,10 @@ CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="12
 # PLACEHOLDER contact address: replace before launch (also in app.js CONTACT_EMAIL)
 CONTACT='cara@rehost.expert'
 
+def mailfb(which):
+    # mailto-only fallback shown under a send button; app.js fills the copy text
+    return f'<div class="mfb" data-mfb="{which}"><p>Email app didn\u2019t open? Copy your details and email <a class="mfb-link" href="mailto:{CONTACT}">{CONTACT}</a>.</p><button type="button" class="mfb-copy">{I("copy")}Copy details</button><span class="mfb-ok" role="status" aria-live="polite"></span></div>'
+
 def head(title,desc,ogdesc):
     return f'''<!doctype html>
 <html lang="en-IE" class="no-js">
@@ -361,6 +366,7 @@ def cta(h2,p,pick_href):
 {contact_fields('c-')}
 <p class="form-msg" id="c-msg" role="alert" hidden></p>
 <a class="btn btn--accent" id="c-send" href="mailto:{CONTACT}?subject=Website%20check">{I('mail')}Ask for a site check</a>
+{mailfb('contact')}
 </form></div>
 </div></section>'''
 
@@ -420,6 +426,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <p class="lead">Book a consultation to talk through how AI and automation could help with the way your business already runs. We look at your day-to-day processes together, pick out the repetitive jobs, and talk plainly about where AI could help and where it wouldn\u2019t.</p>
 <p style="color:#a9b8c3">You decide what, if anything, to go ahead with. Anything we set up drafts for your approval first, unless you ask otherwise.</p>
 <div class="ctas"><a class="btn btn--accent" data-contact data-subject="AI consultation" href="mailto:{CONTACT}?subject=AI%20consultation" style="background:var(--sea-2);color:var(--ink)">{I('spark')}Book an AI consultation</a><span class="ai-price">AI consultation \u2014 Price on request</span></div>
+{mailfb('ai')}
 </div>
 <div class="ai-art rv">{ai_art()}</div>
 </div>
@@ -444,6 +451,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 <p class="form-msg" id="form-msg" role="alert" hidden></p>
 </form>
 <a class="btn btn--accent" id="send" href="mailto:{CONTACT}">{I('mail')}Email my selection</a>
+{mailfb('selection')}
 <button type="button" class="linkbtn" id="reset">Clear all choices</button>
 </aside>
 </div>
