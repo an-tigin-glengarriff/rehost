@@ -131,8 +131,9 @@
   // Email lead tracking: ?ref=CK-123&site=example.ie (kept for the visit; site pre-fills the form)
   var LEADREF='',qs=new URLSearchParams(location.search);
   try{var rr=(qs.get('ref')||'').toUpperCase();if(/^CK-\d{1,4}$/.test(rr))sessionStorage.setItem('leadref',rr);LEADREF=sessionStorage.getItem('leadref')||'';}catch(e){}
-  var qsite=(qs.get('site')||'').toLowerCase();
-  if(/^[a-z0-9.-]{3,80}$/.test(qsite)&&$('f-site')&&!$('f-site').value)$('f-site').value=qsite;
+  // Pre-fill what we already know from the email link; the visitor fills in the rest
+  ['name','biz','email','phone','site'].forEach(function(k){var v=(qs.get(k)||'').trim().slice(0,120),f=$('f-'+k);
+    if(v&&f&&!f.value)f.value=v;});
   var pgrp=ContactGroup('f-','form-msg',null);
   var thanks=$('sel-thanks');
   $('sel-form').addEventListener('submit',function(e){e.preventDefault();thanks.hidden=true;
