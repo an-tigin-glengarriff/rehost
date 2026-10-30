@@ -37,6 +37,8 @@
   var CKEYS=['name','biz','email','phone','site'],CKEY='rehost-contact-v1',cd={};
   try{var raw=JSON.parse(localStorage.getItem(CKEY)||'{}')||{};CKEYS.forEach(function(k){cd[k]=raw[k]||raw['f-'+k]||'';});if(!cd.site)cd.site=localStorage.getItem('rehost-site-v1')||'';}catch(e){CKEYS.forEach(function(k){cd[k]=cd[k]||'';});}
   function saveCd(){try{localStorage.setItem(CKEY,JSON.stringify(cd));}catch(e){}}
+  // Pre-fill what we already know from an email link (?biz=&email=&phone=&site=&name=); the visitor fills in the rest
+  try{var lq=new URLSearchParams(location.search),lhit=false;CKEYS.forEach(function(k){var v=(lq.get(k)||'').trim().slice(0,120);if(v){cd[k]=v;lhit=true;}});if(lhit)saveCd();}catch(e){}
   var EMPTY={name:'Please enter your name.',biz:'Please enter your business name.',email:'Please enter your email address.',phone:'Please enter your phone number.',site:'Please enter your website address.'};
   function fieldError(k,v){v=(v||'').trim();
     if(!v)return EMPTY[k];
@@ -131,9 +133,6 @@
   // Email lead tracking: ?ref=CK-123&site=example.ie (kept for the visit; site pre-fills the form)
   var LEADREF='',qs=new URLSearchParams(location.search);
   try{var rr=(qs.get('ref')||'').toUpperCase();if(/^CK-\d{1,4}$/.test(rr))sessionStorage.setItem('leadref',rr);LEADREF=sessionStorage.getItem('leadref')||'';}catch(e){}
-  // Pre-fill what we already know from the email link; the visitor fills in the rest
-  ['name','biz','email','phone','site'].forEach(function(k){var v=(qs.get(k)||'').trim().slice(0,120),f=$('f-'+k);
-    if(v&&f&&!f.value)f.value=v;});
   var pgrp=ContactGroup('f-','form-msg',null);
   var thanks=$('sel-thanks');
   $('sel-form').addEventListener('submit',function(e){e.preventDefault();thanks.hidden=true;
