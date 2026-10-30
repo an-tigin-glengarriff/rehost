@@ -342,7 +342,7 @@ CTA_ART='''<svg viewBox="0 0 240 240" aria-hidden="true"><circle cx="120" cy="12
 
 # Contact address, shown as plain text only (no email links; all contact goes through the Google Form)
 CONTACT='shane@rehost.expert'
-TEL='tel:+353838128308'; TEL_SHOW='+353 83 812 8308'
+TEL='tel:+353852278203'; TEL_SHOW='+353 85 227 8203'
 def call_block(cls='callbox'):
     return f'<div class="{cls}"><a class="btn btn--accent btn--call" href="{TEL}">{I("phone")}Call Shane on {TEL_SHOW}</a><p class="based">{I("map")}Based in West Cork</p></div>'
 
@@ -733,7 +733,7 @@ BUS=head('Business examples \u00b7 rehost.expert \u00b7 Websites, admin and AI h
 </main>
 {foot('Website rescue, hosting and digital services for small businesses. <a href="index.html">All services</a>','index.html')}'''
 CON=head('Contact us \u00b7 rehost.expert \u00b7 Call Shane',
- 'Contact rehost.expert: call Shane on +353 83 812 8308 or send us a message. Based in West Cork.',
+ 'Contact rehost.expert: call Shane on +353 85 227 8203 or send us a message. Based in West Cork.',
  'Call Shane or send us a message. Based in West Cork.')+f'''
 <header class="top"><div class="wrap">{BRAND('index.html')}
 <nav class="menu" aria-label="Sections"><a href="index.html#broken">Broken site?</a><a href="index.html#services">Services</a><a href="index.html#ai">AI consultation</a><a href="index.html#sectors">Who it\u2019s for</a><a href="business.html">Business</a><a href="index.html#packages">Packages</a><a href="contact.html" aria-current="page">Contact us</a><a class="btn btn--primary" href="#contact">Get in touch</a></nav></div></header>
