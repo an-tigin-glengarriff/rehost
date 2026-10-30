@@ -40,6 +40,7 @@ def I(n,cls=''):
 
 
 ICONS.update({
+'school':'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/><path d="M22 9v6"/>',
 'layout':'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/>',
 'shop':'<path d="M3 9l1.5-5h15L21 9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M5 12v9h14v-9M10 21v-5h4v5"/>',
 'wrench':'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.2L3 17.8V21h3.2l6.3-6.3a4 4 0 0 0 5.2-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/>',
@@ -272,9 +273,10 @@ SECTORS=[('bed','Hospitality','Hotels, B&Bs, guesthouses, restaurants, caf\u00e9
 ('shop','Shops and retail','Opening hours, products and offers kept current, Google listing looked after, and customer messages answered.','business.html#retail'),
 ('plus','Clinics and practices','Appointment calendars in sync, clear contact details, and a secure site patients can trust.','business.html#clinics'),
 ('users','Clubs and community groups','Fixtures, events and news pages that stay up to date, and a site that doesn\u2019t depend on one volunteer.','business.html#clubs'),
-('compass','Tourism and activities','Tours, attractions and activity providers: availability, area guides with maps, and reviews answered.','business.html#tours')]
+('compass','Tourism and activities','Tours, attractions and activity providers: availability, area guides with maps, and reviews answered.','business.html#tours'),
+('school','Schools','Primary and secondary schools: news, calendars and policies kept up to date, a secure site parents can rely on, and less admin for the office.','#contact')]
 def sectors_html():
-    return '\n'.join(f'<a class="sector lnk rv" href="{h}">{I(ic,"ic")}<b>{E(t)}</b><p>{E(d)}</p><span class="go">See the example {I("arrow")}</span></a>' for ic,t,d,h in SECTORS)
+    return '\n'.join(f'<a class="sector lnk rv" href="{h}">{I(ic,"ic")}<b>{E(t)}</b><p>{E(d)}</p><span class="go">{"See the example" if "#" in h and not h.startswith("#") else "Get in touch"} {I("arrow")}</span></a>' for ic,t,d,h in SECTORS)
 
 # ---------------- hero art (generic or hotel) ----------------
 def hero_art(kind):
@@ -516,7 +518,7 @@ HOME=head('rehost.expert \u00b7 Broken website? We rehost, fix and look after it
 </div></section>
 
 <section class="section" id="sectors" aria-labelledby="se-h"><div class="wrap">
-<div class="head rv"><span class="eyebrow">Who it\u2019s for</span><h2 id="se-h">Built for any small business.</h2><p class="lead">The same services work for builders, trades, salons, shops, garages, clinics, offices, farms, tourism, clubs and hospitality. We set them up around how your business runs.</p></div>
+<div class="head rv"><span class="eyebrow">Who it\u2019s for</span><h2 id="se-h">Built for any small business.</h2><p class="lead">The same services work for builders, trades, salons, shops, garages, clinics, offices, farms, schools, tourism, clubs and hospitality. We set them up around how your business runs.</p></div>
 <div class="sectors">{sectors_html()}</div>
 <div class="ctas rv" style="margin-top:26px"><a class="btn btn--primary" href="business.html">See examples for 11 kinds of business {I('arrow')}</a></div>
 </div></section>
