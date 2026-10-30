@@ -125,8 +125,14 @@
     if(undec)L.push('Not decided: '+undec+' service'+(undec>1?'s':''),'');
     var s=suggest(pick('yes'));if(s)L.push(s.pkg?'Closest package: '+s.pkg+(s.add.length?' + '+s.add.join(', '):''):'Extras only: '+s.add.join(', '),'');
     var notes=$('f-notes').value.trim();if(notes)L.push('Notes:',notes);
+    if(LEADREF)L.push('','Lead ref: '+LEADREF+' (from email)');
     return L.join('\n').trim();
   }
+  // Email lead tracking: ?ref=CK-123&site=example.ie (kept for the visit; site pre-fills the form)
+  var LEADREF='',qs=new URLSearchParams(location.search);
+  try{var rr=(qs.get('ref')||'').toUpperCase();if(/^CK-\d{1,4}$/.test(rr))sessionStorage.setItem('leadref',rr);LEADREF=sessionStorage.getItem('leadref')||'';}catch(e){}
+  var qsite=(qs.get('site')||'').toLowerCase();
+  if(/^[a-z0-9.-]{3,80}$/.test(qsite)&&$('f-site')&&!$('f-site').value)$('f-site').value=qsite;
   var pgrp=ContactGroup('f-','form-msg',null);
   var thanks=$('sel-thanks');
   $('sel-form').addEventListener('submit',function(e){e.preventDefault();thanks.hidden=true;
